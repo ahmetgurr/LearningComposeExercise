@@ -23,7 +23,7 @@ class LocationViewModel: ViewModel() {
             viewModelScope.launch {
                 val result = RetrofitClient.create().getAddressFromCoordinates(
                     latlng,
-                    "AIzaSyDN35b7XxfVUfSxoofP8Rr9n-N1xF7BfJo"
+                    "***"
                 )
                 _address.value = result.results
             }
