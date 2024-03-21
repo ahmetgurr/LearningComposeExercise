@@ -1,0 +1,100 @@
+##Project Steps	
+
+-> AppBar oluşturuyoruz ve fun AppBarView ile başlık ve geri butonu tanımlıyoruz.
+
+			***************
+
+-> wish data class oluşturuyoruz burada wishlerimizin alacağı ozellikler(id, title, description) ve DummyWish olarak üç adet wish oluşturuyoruz.
+
+			***************
+   
+-> HomeView oluşturuyoruz ve fun HomeView  ile fun WishItem eklıyoruz. 
+-fun WishItem ile bir card oluşturuyoruz ve bunların düzeninin belirliyoruz ve Wish olan data classımızı ve click özelliği ekliyoruz, bunu Scaffold -> LazyColumn içerisinde DummyWish ->wishList i ekliyoruz listelenıyor. 
+-fun HomeView içerisinde Scaffold oluşturuyoruz bu iskelettir.(Scaffold, genellikle kullanıcı arayüzünü oluşturmak için kullanılan bir yapıdır ve genellikle bir AppBar, FloatingActionButton, Drawer ve BottomNavigationBar gibi yaygın bileşenleri içerir.)
+
+			***************
+
+-> sealed class Screen ekliyoruz bu da navigationlarımızda geçiş yapacağımız adları içeriyor. 
+
+
+			***************
+
+-> WishViewModel oluşturduk -> WishViewModel: ViewModel(){}
+
+			***************
+
+-> Navigation oluşturduk. fun Navigation ile NavHostları oluşturduk geçiş ekranlarını verdik. 
+
+			***************
+   
+-> AddEditDetailView oluşturduk. fun AddEditDetailView, fun WishTextField ekledik. AddEditDetailView içerisinde Scaffold iskeletini ekledik ve AddEditDetailView içerisinde tasarımı oluşturduk(WishTextField yaptığımız OutlinedTextField i içine eklemiş olduk)
+
+			***************
+   
+-> WishViewModel'imizin içerisine giriş kutusunun değerini tutmak için değerlerimizi MutableState oluşturup mutableStateOf'a ekledik. ve function olarak aşağıda bunları tanımladık. Bu oluşturudğumuz fonksiyonları ise değerlere atadık ve WishTextField içerisinde bunları çağırdık. 
+
+			***************
+   
+-> Geri butonu: "navController.navigateUp()" ise AddEditDetailView -> Scaffold'ın özelliği olarak ekledik. Bu özellik gelinen sayfaya geri dönülmesini sağlıyor. 
+
+			***************
+   
+-> Geçiş özellikleri: Geçiş için ise HomeView ve AddEditDetailView içerisine özellik olarak (viewModel: WishViewModel, navController: NavController) ekliyoruz. 
+HomeView da navController.navigate(Screen.AddScreen.route) ile ikinci sayfaya, AddEditDetailView sayfasında ise geri gelmek için navController.navigateUp() kullanıyoruz. 
+(bu özellikler ise Navigation sayfasında içerisine verdiğimiz özellikleri eklemiş oluyoruz. )
+
+	***************		***************		***************
+   
+->Room Database oluşturma: Data classımızın içeriğini güncelliyoruz= Database tablosu, Primary key ve kolonları oluşturmak için eklemeler yapyopruz: @Entity, @PrimaryKey, @ColumnInfo gibi. Örnek: 
+
+@Entity(tableName = "wish-table")
+data class Wish(
+    @PrimaryKey(autoGenerate = true)
+    val id: Long = 0L,
+    @ColumnInfo(name = "wish-title")
+    val title: String= "",
+    @ColumnInfo(name = "wish-desc")
+    val description: String = ""
+)
+
+			***************
+   
+-> WishDao abstract class: Veritabanı işlemlerini gerçekleştiren DAO (Data Access Object) sınıfını tanımlar. ekleme, güncelleme, silme, id'ye göre arama vb. (@Insert, @Query, @Update, @Delete )
+
+			***************
+
+-> WishRepository oluşturma: WishDao'da oluşturduğumuz Veritabanı işlemlerini WishRepository class'ımızda fun olarak çağırıyoruz. 
+
+			***************
+			
+-> WishViewModel sınıfımızın içerisinde lateinit var oluşturuyoruz ve bunu init içerisinde çağırıyoruz, burada amaç lateinit ile bekletmek ve daha sorna çalıştırmak threadlerden dolayı yoksa uygulama başta çöker. Daha sonra WishRepository içerisinde yazdığımız tüm fonksiyonları WishViewModel içerisinde fonksiyon kullanarak çağırıyoruz.
+
+			***************
+
+-> WishDatabase abstract class oluşturma: WishDatabase sınıfı, uygulamanın SQLite veritabanı işlemlerini gerçekleştirmek için kullanılacak temel bileşeni tanımlar. Bu bileşen, veritabanı oluşturulduğunda ve veritabanı işlemleri gerçekleştirildiğinde kullanılır. 
+
+ 			***************
+   
+-> object Graph oluşturuyoruz: veritabanı işlemleri ve ilgili bileşenlerin yönetiminden sorumlu bir köprü görevi gören sayfadır. 
+- wishRepository: veritabanı işlemleri için bir arabirim sağlar
+- provide: provide function ise uygulamanın başlangıcında veritabanı nesnesini oluşturmak için kullanılır
+
+			***************
+   
+-> WishListApp oluşturuyoruz: Android uygulamasının temel Application sınıfını genişleterek uygulama başlatıldığında ne yapılacağını belirler. Graph.provide() metodunu çağırarak gerekli bileşenlerin başlatılmasını sağlar. Bu bileşenler genellikle veritabanı bağlantısı gibi uygulamanın temel bileşenleridir.
+(AndroidManifest.xml dosyamıza "android:name=".WishListApp" eklememiz gerekir yoksa çöker.)
+
+			***************
+   
+-> WishViewModel'imizi düzenliyoruz: private val wishRepository: WishRepository = Graph.wishRepository şeklinde olacak sebebi ise "Graph" objemizdeki "wishRepository"'e erişerek WishViewModel sınıfımızdaki addWish, getWishById, updateWish, deleteWish gibi özellikleri kullanmamıza olanak sağlıyor. 
+
+			***************
+   
+-> AddEditDetailView sayfasına dönüyoruz. Update, işlemini gerçekleştiriyoruz. 
+
+			***************
+   
+-> HomeView sayfasında ise kontrol edip kaydırıp silme özelliği ekliyoruz ve üzerine tıklandıgında diğer detay sayfasına gitme özelliği de veriyoruz. 
+
+			***************
+   
