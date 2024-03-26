@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "447433526952",
+    "project_id": "chatapp-5d2ed",
+    "storage_bucket": "chatapp-5d2ed.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:447433526952:android:72dafea605cf4a84f7bc9d",
+        "android_client_info": {
+          "package_name": "com.ahmetgur.chatapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDEEQGUQAz_UrnRkXusGlnpf9y1ibUbUMw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
